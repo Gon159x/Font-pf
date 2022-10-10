@@ -65,7 +65,7 @@ const CardSlider = () => {
                 <div className={style.btn}>
                   <a
                     className={style.effect}
-                    href={`http://localhost:3000/worker/${w.ID}`}
+                    href={`https://databasepf.herokuapp.com/${w.ID}`}
                     title="View Profile"
                   >
                     View Profile

@@ -3,7 +3,8 @@ import { Action } from "@remix-run/router";
 import axios from "axios";
 import {PUT_WORKER, PUT_WORKER_PREMIUM, PAY,LOADING,GET_WORKER_CONTRACTS,GET_USERS_CONTRACTS,GET_USER_DETAIL,GET_WORKER_DETAIL, GET_WORKERS, GET_JOBS, GET_USERS, GET_USERNAME, POST_USER, LOGIN_SUCCES , GET_WORKERS_SEARCH, ORDER_BY_RATING, FILTER, RESET,TEMPORAL_LOGOUT, PUT_USER, GET_USER_ID,GET_COUNTRIES, UPLOAD_IMAGE, CLEAN_DETAIL } from './actions_vars'
 
-const baseURL = "http://localhost:3001/" //Esto se cambia por localhost:3001 para usarlo local
+const baseURL = "https://databasepf.herokuapp.com/"
+//"http://localhost:3001/" //Esto se cambia por localhost:3001 para usarlo local
 
 export function getWorkers(query, search){
 
@@ -384,7 +385,7 @@ export function finishUserCreation(id, data, jobs) {
       onBoarded: true
     }
 
-    const user = await axios.put(`http://localhost:3001/users/${id}`, toSend);
+    const user = await axios.put(`${baseURL+id}`, toSend);
 
     if(jobs.length) {
       const worker = {
@@ -392,7 +393,7 @@ export function finishUserCreation(id, data, jobs) {
         jobs,
 
       }
-      const res = await axios.post("http://localhost:3001/worker", worker);
+      const res = await axios.post(baseURL+"worker", worker);
     }
 
     dispatch({
@@ -407,7 +408,7 @@ export function pay( paymentMethod ) {
     //cambiar estado premium del modelo  de wokrers
   return async function(dispatch) {
     try {
-      const response = await axios.post("http://localhost:3001/payments", { paymentMethod });
+      const response = await axios.post(baseURL+"payments", { paymentMethod });
       
       const r = response.data;
       dispatch({
@@ -423,7 +424,7 @@ export function pay( paymentMethod ) {
 
 export function premiumPay(payload) {
   return async function(dispatch){
-    const worker = await axios.put("http://localhost:3001/worker/" + payload, {premium: true});
+    const worker = await axios.put(baseURL+"worker/" + payload, {premium: true});
     dispatch({
       type: PUT_WORKER_PREMIUM,
     });
@@ -437,7 +438,7 @@ export function updateWorker(payload, payload2, payloadId) {
     payload.jobs = payload2
     console.log(payload)
     console.log("accions")
-    const worker = await axios.put("http://localhost:3001/worker/" + payloadId , payload);
+    const worker = await axios.put(baseURL+"worker/" + payloadId , payload);
     console.log(worker)
     dispatch({
       type: PUT_WORKER,
