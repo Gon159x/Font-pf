@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+import { connect, useDispatch, useSelector } from 'react-redux'
 import Banner from '../../img/banner.png';
 import './Worker.css'
 import Profile from './Profile';
@@ -7,12 +7,14 @@ import Stats from './Stats';
 import Opinion from './Opinion';
 import { Pagination, Skeleton } from '@mui/material';
 import Filters from './Filters';
-import { getUserDetail,getContractUsers, getContractWorker } from '../../redux/actions/actions';
+import { getUserDetail,getContractUsers, getContractWorker, cleanDetail } from '../../redux/actions/actions';
 import { useParams } from 'react-router-dom';
 import Buttons from './Buttons';
 import Footer from '../Footer/Footer';
+import cardContracts from '../CardContracts/CardContracts';
+import CardContracts from '../CardContracts/CardContracts';
 
-export const Worker = ({authState,getUserDetail,getContractWorker,getContractUsers,user,users,isLoading}) => {
+export const Worker = ({authState,getUserDetail,getContractWorker,getContractUsers,user,users,isLoading, cleanDetail}) => {
 
   const id = useParams().id
   const [pag,setPag] = useState(1)
@@ -24,9 +26,15 @@ export const Worker = ({authState,getUserDetail,getContractWorker,getContractUse
   const [listaValoraciones,setListaValoraciones] = useState([])
   const [forzarCambio, setForzarCambio] = useState(false)
   const [worker, setWorker] = useState({})
+  const [displaying, setDisplaying] = useState("")
+
 
   useEffect(() =>{
     getUserDetail(id)
+
+    return () => {
+      cleanDetail();
+    }    
   },[])
 
 
@@ -117,6 +125,13 @@ export const Worker = ({authState,getUserDetail,getContractWorker,getContractUse
     }
   }
   
+  const ocultarFilters = (buleano) => {
+    
+    if(!buleano)
+    setDisplaying("")
+    else 
+    setDisplaying("none")
+  }
 
   return (
     <>
@@ -129,23 +144,26 @@ export const Worker = ({authState,getUserDetail,getContractWorker,getContractUse
           <img src={Banner} alt='banner'/>
       </div>
       <div className="w-content">
-        <div className="w-left">
-            {worker.User && worker.User.name ? <Profile img = {worker.User.img} name = {worker.User.name} jobs = {worker.Jobs} description={worker.description} status = {authState.isLoggedIn}/> : <Skeleton variant = "circular">
+        <div className="w-left" >
+        {worker.User && worker.User.name ? <Profile id={user.Worker.ID} ocultarFilters={ocultarFilters} img = {worker.User.img} name = {worker.User.name} jobs = {worker.Jobs} description={worker.description} status = {authState.isLoggedIn}/> : <Skeleton variant = "circular">
 
-            </Skeleton> }
+          </Skeleton> }
           </div>
 
-        <div className="w-right">
+        <div className="w-right" style={{display:displaying}}>
             {finishedJobs > 0? <Stats finishedJobs={finishedJobs} promedioRating = {promedioRating} texto = {worker.Jobs? "terminados" : "requeridos"}/>: <Stats finishedJobs={0} promedioRating = {0} texto = {worker.Jobs? "terminados" : "requeridos"}/>}
             
             {worker.User ? <>
-            <div className="filters">
+            <div className="filters-worker" style={{display:displaying}}>
               <Filters filtrado = {ordenarFiltrados}/>
             </div>
             <Opinion contratos={valoraciones} tipo = {worker.Jobs} />
             
               {maxPag > 0 && finishedJobs > 0 ?  <div className="pagination"><Pagination count={maxPag} onChange={handleChange} hidePrevButton hideNextButton/> </div>:<></>}
             </>: <></>}
+            {/* <div className="contracts-worker">
+              <h4>Contractos pendientes</h4>
+              <CardContracts/></div> */}
             
         </div>
       </div>
@@ -170,9 +188,11 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps (dispatch) {
   return {
+
   getUserDetail : (id) => dispatch(getUserDetail(id)),
   getContractUsers : (ids) => dispatch(getContractUsers(ids)),
-  getContractWorker: (ids) => dispatch(getContractWorker(ids))
+  getContractWorker: (ids) => dispatch(getContractWorker(ids)),
+  cleanDetail: () => dispatch(cleanDetail()) 
   }
 }
 

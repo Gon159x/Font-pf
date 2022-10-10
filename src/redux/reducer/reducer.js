@@ -1,5 +1,32 @@
 
-import {GET_WORKER_CONTRACTS,GET_USER_DETAIL,LOADING,GET_USERS_CONTRACTS,GET_WORKER_DETAIL, GET_WORKERS, GET_JOBS, GET_USERS, GET_USERNAME, POST_USER, GET_WORKERS_PREMIUM, LOGIN_SUCCES , GET_WORKERS_SEARCH, ORDER_BY_RATING, FILTER, RESET, TEMPORAL_LOGOUT, PUT_USER, GET_USER_ID,GET_COUNTRIES } from '../actions/actions_vars'
+import {
+  PUT_WORKER,
+  PUT_WORKER_PREMIUM,
+  PAY,
+  GET_WORKER_CONTRACTS,
+  GET_USER_DETAIL,
+  LOADING,
+  GET_USERS_CONTRACTS,
+  GET_WORKER_DETAIL,
+  GET_WORKERS,
+  GET_JOBS,
+  GET_USERS,
+  GET_USERNAME,
+  POST_USER,
+  GET_WORKERS_PREMIUM,
+  LOGIN_SUCCES ,
+  GET_WORKERS_SEARCH,
+  ORDER_BY_RATING,
+  FILTER,
+  RESET,
+  TEMPORAL_LOGOUT,
+  PUT_USER,
+  GET_USER_ID,
+  GET_COUNTRIES,
+  UPLOAD_IMAGE,
+  CLEAN_DETAIL
+} from '../actions/actions_vars'
+
 
 const localStorageAuth = () => {
   const auth = localStorage.getItem("auth");
@@ -21,9 +48,10 @@ const initialState = {
   isLoading: false,
   userDetail: {},
   allCountries: [],
-  allWorkers: []
+  allWorkers: [],
+  filtrado: [],
+  uploadedImg: ""
 }
-
 const reducer = (state = initialState, action) => {
   switch(action.type) {
 
@@ -74,14 +102,15 @@ const reducer = (state = initialState, action) => {
           ...state
         }
     case GET_JOBS: 
-      return{
+      return{ 
         ...state,
         jobs : action.payload
     }
 
     case GET_WORKERS:
-      let workers = action.payload
+      let workers = action.payload      
       var totalrating = 0
+      let filteredByPremium = workers.filter((w) => w.premium === false)   //Cambiar a true cuando se pueda ser prermium
       for (let i = 0; i < workers.length; i++) {
         totalrating = 0
         workers[i].Contracts && workers[i].Contracts.map(contract => totalrating = totalrating + contract.rating_W)
@@ -90,18 +119,16 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         workers: action.payload,
-        allWorkers: action.payload
+        allWorkers: action.payload,
+        filtrado: action.payload,
+        workersPremium: filteredByPremium
 }
     case RESET: 
     return {
         ...state,
         workers: state.allWorkers
     }
-    case GET_WORKERS_PREMIUM:
-      return {
-        ...state,
-      workersPremium: action.payload
-      }
+
     case LOGIN_SUCCES:
       const authState = {
         isLoggedIn: true,
@@ -113,10 +140,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         authState
       }
+
     case GET_WORKERS:
       return {
         ...state,
-        workers: action.payload
+        users: action.payload 
       }
       case GET_WORKERS_SEARCH:
         let filtrado = state.workers.filter( (e) => e.User.name.toLowerCase().includes(action.payload.toLowerCase()))
@@ -125,7 +153,8 @@ const reducer = (state = initialState, action) => {
         }
       return {
           ...state,
-          workers: action.payload !== "" ? filtrado : state.allWorkers
+          workers: action.payload !== "" ? filtrado : state.allWorkers,
+          filtrado: action.payload !== "" ? filtrado : state.allWorkers,
         }
 
       case ORDER_BY_RATING:{
@@ -168,6 +197,34 @@ const reducer = (state = initialState, action) => {
       return{
         ...state,
         allCountries: action.payload
+      }
+    }
+    case PAY:{
+      return{
+        ...state
+      }
+    }
+    case PUT_WORKER_PREMIUM: {
+      return{
+        ...state
+      }
+    }
+    case PUT_WORKER: {
+      return {
+        ...state
+      }
+    }
+    case UPLOAD_IMAGE:{
+      return{
+        ...state, uploadedImg: action.payload
+
+      }
+    }
+    case CLEAN_DETAIL: {
+      return {
+        ...state,
+        userDetail: {},
+        selectedContracts: []
       }
     }
     default:
