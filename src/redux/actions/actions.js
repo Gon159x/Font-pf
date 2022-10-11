@@ -385,7 +385,7 @@ export function finishUserCreation(id, data, jobs) {
       onBoarded: true
     }
 
-    const user = await axios.put(`${baseURL+id}`, toSend);
+    const user = await axios.put(`${baseURL}/users/${id}`, toSend);
 
     if(jobs.length) {
       const worker = {
