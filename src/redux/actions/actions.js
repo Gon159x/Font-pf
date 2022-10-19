@@ -42,9 +42,9 @@ import {
 import { io } from "socket.io-client";
 
 const URL = "http://localhost:3001/";
-//const URL = "https://databasepf.herokuapp.com/"
+const baseURL = "https://databasepf.herokuapp.com/"
 
-const baseURL = "http://localhost:3001/"; //Esto se cambia por localhost:3001 para usarlo local
+//const baseURL = "http://localhost:3001/"; //Esto se cambia por localhost:3001 para usarlo local
 
 export function getWorkers(query, search) {
   return function (dispatch) {
