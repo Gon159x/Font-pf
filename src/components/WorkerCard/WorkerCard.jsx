@@ -68,7 +68,7 @@ const WorkerCard = ({ Worker, User, Jobs, Contracts }) => {
             ))}
         </div>
         <div className={s.information}>
-          <h3>Ubicación: {User.Country.name? User.Country.name: null}</h3>
+          <h3>Ubicación: {User.Country.name}</h3>
           <h3>
             Estado: {User.isOnline === false ? "Desconectado" : "Conectado"}
           </h3>
