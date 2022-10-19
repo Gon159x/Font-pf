@@ -84,7 +84,7 @@ export default function HomePrueba(){
                                     name = {worker.User.name}
                                     lastName = {worker.User.lastName}
                                     job = {worker.Jobs[0].name}
-                                    country = {worker.User.Country.name}
+                                    country = {worker.User.Country.name? worker.User.Country.name: "Indefinido"}
                                     city = {worker.User.city}
                                     premium = {worker.premium}
                                     img = {worker.User.img}
