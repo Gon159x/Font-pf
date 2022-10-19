@@ -41,7 +41,7 @@ import {
 } from "./actions_vars";
 import { io } from "socket.io-client";
 
-const URL = "http://localhost:3001/";
+//const URL = "http://localhost:3001/";
 const baseURL = "https://databasepf.herokuapp.com/"
 
 //const baseURL = "http://localhost:3001/"; //Esto se cambia por localhost:3001 para usarlo local
