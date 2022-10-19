@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 
 import OwlCarousel from "react-owl-carousel";
 import info from "./data.js";
 
-import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
@@ -12,18 +11,14 @@ import "./TestimonialsSlider.css";
 
 const TestiMonials = () => {
   const workersState = useSelector((state) => state.workers);
-  const workersToShow = workersState;
+  const workers = workersState ? workersState : info.examples;
 
-  const options = info.opt;  
+  const options = info.opt;
 
   return (
     <section id="testimonial" className="testimonials pt-70 pb-70">
-      <div className="container mt-5">        
-        <Container maxWidth="string" align="center">
-            <div className="title">
-              Testimonials about our workers
-            </div>          
-        </Container>
+      <div>
+        <div className="title">Testimonials about our workers</div>
         <Typography
           variant="h5"
           align="center"
@@ -39,35 +34,30 @@ const TestiMonials = () => {
               className="owl-carousel owl-theme"
               {...options}
             >
-              {workersToShow.length === 0 ? (
-                <div class="item">
-                  <div class="shadow-effect">
-                    <img class="img-circle" src={`${info.pic}`} alt="pic2" />
-
+              {workers.length === 0 ? (
+                <div className="item">
+                  <div className="shadow-effect">
                     <p>
                       "Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore
-                      magna.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed do eiusmod tempor incididunt ut labore et dolore
+                      magna.Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit, sed do eiusmod tempor incididunt ut labore et dolore
                       magna."
                     </p>
                   </div>
-                  <div class="testimonial-name">
+                  <div className="testimonial-name">
                     <h5>Gustavo Cerati</h5>
                     <small>PROGRAMADOR</small>
                   </div>
                 </div>
               ) : (
-                workersToShow.map((t) => {
+                workers.map((t, index) => {
                   return (
-                    <div class="item">
-                      <div class="shadow-effect">
-                        <div class="img-circle">
-                          <img src={t.User.img} alt="pics" />
-                        </div>
+                    <div key={index} className="item">
+                      <div className="shadow-effect">
                         <p>{t.Contracts.comment_U}</p>
                       </div>
-                      <div class="testimonial-name">
+                      <div className="testimonial-name">
                         <h5>
                           {t.User.name} {t.User.lastName}
                         </h5>

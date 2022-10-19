@@ -24,7 +24,19 @@ import {
   GET_USER_ID,
   GET_COUNTRIES,
   UPLOAD_IMAGE,
-  CLEAN_DETAIL
+  CLEAN_DETAIL,
+  POST_COUNTRY,
+  POST_JOB,
+  DELETE_USER,
+  DELETE_JOB,
+  DELETE_COUNTRY,
+  AGREGAR_SOCKET,
+  ADD_FAVORITE,
+  DELETED_FAVORITE,
+  GET_USER,
+  SET_CONECTED,
+  GET_CHATS
+
 } from '../actions/actions_vars'
 
 
@@ -39,6 +51,8 @@ const storagedData = localStorageAuth();
 
 const initialState = {
   workers: [],
+  newUser:[],
+  onlyUser: [],
   users: [],
   jobs: [],
   workersPremium: [],
@@ -47,13 +61,36 @@ const initialState = {
   selectedContracts: [],
   isLoading: false,
   userDetail: {},
+  user: {},
   allCountries: [],
   allWorkers: [],
   filtrado: [],
-  uploadedImg: ""
+  uploadedImg: "",
+  socket: null,
+  popUps: [],
+  onlineUsers:[],
+  chats: []
 }
 const reducer = (state = initialState, action) => {
   switch(action.type) {
+
+    case SET_CONECTED:
+      return {
+        ...state,
+        onlineUsers:action.payload
+      }
+
+    case GET_USER:
+      return{
+        ...state,
+        user:action.payload
+      }
+
+    case AGREGAR_SOCKET:
+      return{
+        ...state,
+        socket:!state.socket? action.payload : state.socket
+      }
 
     case GET_USER_DETAIL:
       return{
@@ -74,6 +111,12 @@ const reducer = (state = initialState, action) => {
         isLoading:false
       }
 
+      case GET_CHATS:
+        return{
+          ...state,
+          chats: action.payload
+        }
+
     case GET_WORKER_CONTRACTS:
       return{
         ...state,
@@ -88,9 +131,12 @@ const reducer = (state = initialState, action) => {
         isLoading:false
       }
     case GET_USERS:
+        let onlyUser = action.payload.filter(el => el.Worker === null)
         return {
           ...state,            
-          users: action.payload            
+          users: action.payload,
+          newUser: action.payload,
+          onlyUser: onlyUser
         }
     case GET_USERNAME:
       return {
@@ -110,7 +156,7 @@ const reducer = (state = initialState, action) => {
     case GET_WORKERS:
       let workers = action.payload      
       var totalrating = 0
-      let filteredByPremium = workers.filter((w) => w.premium === false)   //Cambiar a true cuando se pueda ser prermium
+      let filteredByPremium = workers.filter(w => w.premium === true)   //Cambiar a true cuando se pueda ser prermium
       for (let i = 0; i < workers.length; i++) {
         totalrating = 0
         workers[i].Contracts && workers[i].Contracts.map(contract => totalrating = totalrating + contract.rating_W)
@@ -139,12 +185,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         authState
-      }
-
-    case GET_WORKERS:
-      return {
-        ...state,
-        users: action.payload 
       }
       case GET_WORKERS_SEARCH:
         let filtrado = state.workers.filter( (e) => e.User.name.toLowerCase().includes(action.payload.toLowerCase()))
@@ -225,6 +265,47 @@ const reducer = (state = initialState, action) => {
         ...state,
         userDetail: {},
         selectedContracts: []
+      }
+    }
+    case POST_COUNTRY: {
+      return {
+        ...state,
+      }
+    }
+    case POST_JOB: {
+      return {
+        ...state,
+      }
+    }
+    case DELETE_USER:{
+      return {
+        ...state
+      }
+    }
+    case DELETE_JOB:{
+      return {
+        ...state
+      }
+    }
+    case DELETE_COUNTRY: {
+      return {
+        ...state
+      }
+    }
+    case ADD_FAVORITE: {
+      return {
+        ...state           
+      }
+    }
+    case DELETED_FAVORITE: {
+      const workersFav = state.users.Favorites
+      const us = state.users
+      const stayWorkersFav = workersFav.filter(e => e.ID !== action.payload)   
+      us.Favorites = stayWorkersFav
+      return {
+        ...state,
+        users: us,
+        user: us
       }
     }
     default:

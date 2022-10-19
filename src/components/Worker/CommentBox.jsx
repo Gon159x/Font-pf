@@ -3,11 +3,19 @@ import React from 'react'
 import './CommentBox.css'
 import { Typography, Rating,Box } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-function CommentBox({descripcion,imagen,nombre,rating,id}) {
+function CommentBox({forceUpdate,descripcion,imagen,nombre,rating,type,id}) {
+  const navigate = useNavigate()
+  const navegar = () => {
+    navigate('/profile/'+type+id);
+    console.log(forceUpdate)
+    forceUpdate()
+  };
+
   return (
-      <p>
-        
+    <div onClick={navegar}>
+        <div className="commentBoxContainer">
           <div className="c-left">
             {/* <img className='o-img' src={imagen} alt='nose'/> */}
             <Avatar alt={nombre} src={imagen} sx={{ width: 94, height: 94, marginLeft:2}} />
@@ -20,10 +28,9 @@ function CommentBox({descripcion,imagen,nombre,rating,id}) {
             </div>
             <span className="c-description">{descripcion}</span>
           </div>
-
- 
+       </div>
+    </div>
         
-    </p>
   )
 }
 

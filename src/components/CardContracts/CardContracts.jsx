@@ -10,12 +10,13 @@ import { connect } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import {sumador} from '../../AuxFunctions'
 
-function CardContracts({isLoading,getUserDetail,user}) {
+function CardContracts({isWorker,isLoading,getUserDetail,user}) {
   const[columns,setColumns] = useState([[],[],[]])
   const[page,setPage] = useState(1)
   const[maxPage,setMaxPage] = useState(1)
   const[type,setType] = useState('p')
   const[update,setUpdate] = useState(false)
+  const[loading2,setLoading2] = useState(true)
   let keys = sumador()
 
   const changePag = (e) => {
@@ -26,21 +27,34 @@ function CardContracts({isLoading,getUserDetail,user}) {
 
   useEffect(()=>{
     getUserDetail(id)
-    console.log("--------------->Entre")
   },[update])
 
+  useEffect(()=>{
+    if(user)
+      setLoading2(false)
+    else
+      setLoading2(true)
+  },[user])
 
   useEffect(()=>{
+    
     let contratos = []
+    let todos_contratos = []
+
+    if(user.Worker){
+      todos_contratos = user.Worker.Contracts.map(e => {e.type = true; return e} )
+    }
+    todos_contratos = todos_contratos.concat(user.Contracts)
+
     if(user.Contracts){
       if(type == 'p')
-      contratos = user.Contracts.filter(e => !e.confirmed && !e.finished)
+      contratos = todos_contratos.filter(e => !e.confirmed && !e.finished)
       if(type == 'c')
-      contratos = user.Contracts.filter(e => e.confirmed && !e.finished)
+      contratos = todos_contratos.filter(e => e.confirmed && !e.finished)
       if(type == 't')
-      contratos = user.Contracts.filter(e => e.finished && e.confirmed)
+      contratos = todos_contratos.filter(e => e.finished && e.confirmed)
       if(type == 'f')
-      contratos = user.Contracts.filter(e => e.finished && !e.confirmed)
+      contratos = todos_contratos.filter(e => e.finished && !e.confirmed)
     }
 
     setMaxPage(Math.ceil(contratos.length/9))
@@ -53,7 +67,6 @@ function CardContracts({isLoading,getUserDetail,user}) {
       num = num%3
     }
     setColumns(columnas_aux)
-    console.log(columnas_aux)
   },[page,type,isLoading])
 
 
@@ -61,7 +74,12 @@ function CardContracts({isLoading,getUserDetail,user}) {
     setUpdate(!update)
   }
 
+  const forceLoading = () => {
+    setLoading2(true)
+  }
+
   const changeType = (e) =>{
+    setPage(1)
     setType(e.target.value)
   }
 
@@ -76,33 +94,45 @@ function CardContracts({isLoading,getUserDetail,user}) {
       </ButtonGroup>
       </div>
       
-        {!isLoading ? <div className={style.cardContainer}>
+        {!isLoading && !loading2 ? <div className={style.cardContainer}>
         <div className={style.columnContainer}>
         {columns[0].length > 0 ? columns[0].map(e =>  <CardContract id = {e.id} key = {keys()} date={e.date} location={e.location}
         state = {e.finished ? "Terminado" : e.confirmed? "Confirmado" : "Pendiente de confirmacion"}
         description = {e.description}
-        worker = {user.Worker && true}
+        worker = {e.type}
+        cu ={e.comment_U}
+        cw ={e.comment_W}
         type = {type}
         force = {forceUpdate}
+        loading = {forceLoading}
+        userID = {e.UserID}
         /> ):<h3>No hay contratos para mostrar...</h3>}
         </div>
         <div className={style.columnContainer}>
         {columns[1].map(e =>  <CardContract id = {e.id} key = {keys()} date={e.date} location={e.location}
         state = {e.finished ? "Terminado" : e.confirmed? "Confirmado" : "Pendiente de confirmacion"}
         description = {e.description}
-        worker = {user.Worker && true}
+        worker = {e.type}
         type = {type}
+        cu ={e.comment_U}
+        cw ={e.comment_W}
         force = {forceUpdate}
+        userID = {e.UserID}
         /> )}
         </div>
         <div className={style.columnContainer}>
-        {columns[2].map(e =>  <CardContract id = {e.id} key = {keys()} date={e.date} location={e.location}
+        {
+        columns[2].map(e =>  <CardContract id = {e.id} key = {keys()} date={e.date} location={e.location}
         state = {e.finished ? "Terminado" : e.confirmed? "Confirmado" : "Pendiente de confirmacion"}
         description = {e.description}
-        worker = {user.Worker && true}
+        worker = {e.type}
+        cu ={e.comment_U}
+        cw ={e.comment_W}
         type = {type}
         force = {forceUpdate}
-        /> )}
+        userID = {e.UserID}
+        /> )
+        }
         </div>
       </div> : <h3>Loading...</h3> }
       
