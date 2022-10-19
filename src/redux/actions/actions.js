@@ -35,15 +35,16 @@ import {
   DELETE_USER,
   DELETE_JOB,
   DELETE_COUNTRY,
-  SET_CONECTED,
-  GET_CHATS
+  GET_CHATS,
+  GET_CHAT_BY_PK,
+  SET_CONECTED
 } from "./actions_vars";
 import { io } from "socket.io-client";
 
-//const URL = "http://localhost:3001/";
-const baseURL = "https://databasepf.herokuapp.com/"
+const URL = "http://localhost:3001/";
+//const URL = "https://databasepf.herokuapp.com/"
 
-//const baseURL = "http://localhost:3001/"; //Esto se cambia por localhost:3001 para usarlo local
+const baseURL = "http://localhost:3001/"; //Esto se cambia por localhost:3001 para usarlo local
 
 export function getWorkers(query, search) {
   return function (dispatch) {
@@ -69,6 +70,7 @@ export function agregarSocker(id) {
   return async function (dispatch) {
     const socket = await io(baseURL);
     await socket.emit("addUser", id);
+    console.log(socket)
     dispatch({ type: AGREGAR_SOCKET, payload: socket });
   };
 }
@@ -213,6 +215,19 @@ export function getChats(id) {
       .then((chat) => {
         dispatch({
           type: GET_CHATS,
+          payload: chat.data,
+        });
+      })
+      .catch((err) => {console.log(err.message)});
+  };
+}
+export function getChatByPk(id) {
+  return function (dispatch) {
+    axios
+      .get(baseURL + "chat/?id=" + id)
+      .then((chat) => {
+        dispatch({
+          type: GET_CHAT_BY_PK,
           payload: chat.data,
         });
       })
@@ -509,6 +524,7 @@ export function premiumPay(payload) {
 export function updateWorker(payload, payload2, payloadId) {
   return async function (dispatch) {
     payload.jobs = payload2;
+    console.log(payload)
     const worker = await axios.put(
       baseURL+"worker/" + payloadId,
       payload
@@ -590,8 +606,9 @@ export function postCountry(obj) {
 export function postJob(obj) {
   return async function (dispatch) {
     try {
-      await axios.post(baseURL+"jobs", obj);
-      dispatch({ type: POST_JOB });
+      await axios.post(baseURL+"jobs", obj)
+      dispatch({type: POST_JOB})
+      return obj
     } catch (error) {
     }
   };
@@ -629,5 +646,5 @@ export function deleteCountry(id) {
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 }

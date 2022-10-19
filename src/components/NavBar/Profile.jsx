@@ -52,7 +52,7 @@ const Profile = () => {
       dispatch(getUserId(sub));
       dispatch(getUserDetail(sub, "GET_USER"));
     }
-  }, [dispatch, users.img]);
+  }, [dispatch, user.img]);
 
   useEffect(() => {
     if (sub) {
@@ -70,6 +70,8 @@ const Profile = () => {
         popUpAux.name = e.Emiter.name;
         popUpAux.viewed = e.viewed;
         popUpAux.id = e.id;
+        // const filtro = popUpsAux.filter(c => c.viewed === false && c.type==="mensaje" && c.img === e.Emiter.img && c.name === e.Emiter.name)
+        // if(filtro.length === 0)
         popUpsAux.push(popUpAux);
       });
       if (popUpsAux.length > 0) popUpsAux = popUpsAux.reverse(); //Deberia ordenarlos por fecha, para no tener que usar esto que da vuelta cuando quiere las notificaciones jaja
@@ -117,7 +119,7 @@ const Profile = () => {
     setAnchorElUser(null);
   };
   const handleOpenProfile = () => {
-    navigate(`/profile/user/${sub}`,{replace:true});
+    navigate(`/profile/user/${sub}`);
     setAnchorElUser(null);
   };
 
@@ -153,28 +155,52 @@ const Profile = () => {
     setPopUpsEnabled(false);
   };
 
-  const settings = [
-    {
-      name: "Profile",
-      handler: handleOpenProfile,
-    },
-    {
-      name: "Contratos",
-      handler: handleContracts,
-    },
-    {
-      name: "Settings",
-      handler: handleSettings,
-    },
-    {
-      name: "Dashboard",
-      handler: handleCloseUserMenu,
-    },
-    {
-      name: "Logout",
-      handler: handleLogout,
-    },
-  ];
+  const handleDashboard = () => {
+    navigate("/dashboard");
+  };
+
+  const settings = user.isAdmin
+    ? [
+        {
+          name: "Profile",
+          handler: handleOpenProfile,
+        },
+        {
+          name: "Contratos",
+          handler: handleContracts,
+        },
+        {
+          name: "Settings",
+          handler: handleSettings,
+        },
+        {
+          name: "Dashboard",
+          handler: handleDashboard,
+        },
+        {
+          name: "Logout",
+          handler: handleLogout,
+        },
+      ]
+    : [
+        {
+          name: "Profile",
+          handler: handleOpenProfile,
+        },
+        {
+          name: "Contratos",
+          handler: handleContracts,
+        },
+        {
+          name: "Settings",
+          handler: handleSettings,
+        },
+        {
+          name: "Logout",
+          handler: handleLogout,
+        },
+      ];
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -211,12 +237,12 @@ const Profile = () => {
         <div>
           <Chip
             className={s.name}
-            label={`${users.name} ${users.lastName}`}
+            label={`${user.name} ${user.lastName}`}
             variant="outlined"
           />
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src={users.img} />
+              <Avatar alt="Remy Sharp" src={user.img} />
             </IconButton>
           </Tooltip>
         </div>
