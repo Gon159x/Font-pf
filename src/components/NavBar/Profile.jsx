@@ -117,7 +117,7 @@ const Profile = () => {
     setAnchorElUser(null);
   };
   const handleOpenProfile = () => {
-    navigate(`/profile/user/${sub}`);
+    navigate(`/profile/user/${sub}`,{replace:true});
     setAnchorElUser(null);
   };
 
