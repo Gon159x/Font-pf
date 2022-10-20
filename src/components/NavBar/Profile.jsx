@@ -145,7 +145,11 @@ const Profile = () => {
     setAnchorElUser(null);
   };
   const handleOpenProfile = () => {
-    window.location.replace(`/profile/user/${sub}`);
+    if (user.Worker) {
+      window.location.replace(`/profile/${sub}`);
+    } else {
+      window.location.replace(`/profile/user/${sub}`);
+    }
     setAnchorElUser(null);
   };
 
