@@ -102,7 +102,7 @@ export default function Chat({ guest, host, messages }) {
               ? `${guest.name} ${guest.lastName}`
               : `${host.name} ${host.lastName}`}
           </h3>
-          <p>Last seen at: {"No se cuando estuvo"}</p>
+          {/* <p>Last seen at: {"No se cuando estuvo"}</p> */}
         </div>
         <div className="chat__headerButtons">
           <IconButton>
