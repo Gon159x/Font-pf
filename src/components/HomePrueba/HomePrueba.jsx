@@ -85,7 +85,7 @@ export default function HomePrueba() {
                     lastName={worker.User.lastName ?worker.User.lastName : "Apellido invalido" }
                     job={worker.Jobs[0].name ? worker.Jobs[0].name : "Trabajo invalido"}
                     country={worker.User.Country ? worker.User.Country.name : "Nacionalidad invalida" }
-                    city={worker.User.city ? worker.User.city : "invalido"}
+                    city={worker.User.city ? worker.User.city : "Ciudad invalida"}
                     premium={worker.premium ? worker.premium :false}
                     img={worker.User.img ? worker.User.img : "invalido"}
                   />
