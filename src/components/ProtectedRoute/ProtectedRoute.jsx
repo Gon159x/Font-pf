@@ -31,7 +31,7 @@ const ProtectedRoute = ({ children }) => {
 
       }
     }
-  },[dispatch]) 
+  },[userDetail,dispatch]) 
 
 
 
