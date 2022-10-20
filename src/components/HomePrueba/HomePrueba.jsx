@@ -77,6 +77,7 @@ export default function HomePrueba() {
           <div className={s.workers}>
             {currentWorkers.length ? (
               currentWorkers.map((worker,index) => {
+                console.log(worker)
                 return (
                   <CardsWorkers
                     key={index}
