@@ -85,10 +85,10 @@ export default function HomePrueba() {
                     name={worker.User.name ? worker.User.name:"Invalido"}
                     lastName={worker.User.lastName ?worker.User.lastName : "Invalido" }
                     job={worker.Jobs[0].name ? worker.Jobs[0].name : "Invalido"}
-                    country={worker.User.Country.name? worker.User.Country.name : "Invalido" }
+                    country={worker.User.Country ? worker.User.Country.name : "Invalido" }
                     city={worker.User.city ? worker.User.city : "Invalido"}
-                    premium={worker.premium ? worker.premium : "Invalido"}
-                    img={worker.User.img? worker.User.img : "Invalido"}
+                    premium={worker.premium ? worker.premium :false}
+                    img={worker.User.img ? worker.User.img : "Invalido"}
                   />
                 );
               })
