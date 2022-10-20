@@ -369,7 +369,7 @@ export function filter(array, job, disponibilidad, zona) {
   }
   if (job === "all" && disponibilidad === "all" && zona !== "all") {
     for (let i = 0; i < array.length; i++) {
-      if (array[i].User.Country.name === zona) {
+      if (array[i].user.Country && (array[i].User.Country.name === zona)) {
         filterArray.push(array[i]);
       }
     }
