@@ -16,6 +16,7 @@ const ProtectedRoute = ({ children }) => {
    useEffect(() => {
     //alguna condicion para no cambiar el userDetail
     if(isAuthenticated){
+      if (userDetail.onBoarded) return;
       dispatch(getUserId(user.sub))
       if(userDetail.message){
         dispatch(createUser({
