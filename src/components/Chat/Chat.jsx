@@ -14,38 +14,37 @@ export default function Chat({ guest, host, messages }) {
   const [input, setInput] = useState("");
   const { user } = useAuth0();
   const socket = useSelector((state) => state.socket);
-  const [mensajes, setMensajes] = useState(messages)
-  const [elemento, setElemento] = useState({})
-  const [forceUpdate,setForceUpdate] = useState(true)
-  const [onChat,setOnchat] = useState()
-  useEffect(()=>{
-    setMensajes(messages)
-  }
-  ,[messages])
-
+  const [mensajes, setMensajes] = useState(messages);
+  const [elemento, setElemento] = useState({});
+  const [forceUpdate, setForceUpdate] = useState(true);
+  const [onChat, setOnchat] = useState();
+  useEffect(() => {
+    setMensajes(messages);
+  }, [messages]);
 
   useEffect(() => {
     socket?.on("createMessage", ({ EmitterID, text, date }) => {
       //aca renderizo el mensaje del texto y listo
-      setOnchat(EmitterID)
-      setElemento({text,EmitterID, date})
-      setForceUpdate(false)
-    })
-  },[socket,onChat])
+      setOnchat(EmitterID);
+      setElemento({ text, EmitterID, date });
+      setForceUpdate(false);
+    });
+  }, [socket, onChat]);
 
-  useEffect(()=> {
-    if(guest?.ID === onChat || host?.ID ===onChat){
-      const aux = mensajes 
-      aux?.push(elemento)
-      setMensajes(aux) 
-      setForceUpdate(true)
+  useEffect(() => {
+    if (guest?.ID === onChat || host?.ID === onChat) {
+      const aux = mensajes;
+      aux?.push(elemento);
+      setMensajes(aux);
+      setForceUpdate(true);
     }
-    
-  },[elemento])
+  }, [elemento]);
 
-var horas = `${new Date(Date.now()).getHours()}`
-var minutos = `${new Date(Date.now()).getMinutes()}`
-if (minutos < 10){ minutos = '0' + minutos}
+  var horas = `${new Date(Date.now()).getHours()}`;
+  var minutos = `${new Date(Date.now()).getMinutes()}`;
+  if (minutos < 10) {
+    minutos = "0" + minutos;
+  }
 
   function sendMessage(e) {
     e.preventDefault();
@@ -54,30 +53,34 @@ if (minutos < 10){ minutos = '0' + minutos}
       id_receptor: host.ID === user.sub ? guest.ID : host.ID,
       texto: input,
       date: horas + ":" + minutos,
-
     });
-    const aux = mensajes 
-    aux.push({text:input,EmitterID:user.sub, date: horas + ":" + minutos})
-    setInput("")
-    setMensajes(aux)
-    socket?.emit("enviarNotificacion",{receptor_id:host.ID === user.sub ? guest.ID : host.ID,emisor_id:user.sub,tipo:"mensaje"})
+    const aux = mensajes;
+    aux.push({ text: input, EmitterID: user.sub, date: horas + ":" + minutos });
+    setInput("");
+    setMensajes(aux);
+    socket?.emit("enviarNotificacion", {
+      receptor_id: host.ID === user.sub ? guest.ID : host.ID,
+      emisor_id: user.sub,
+      tipo: "mensaje",
+    });
   }
 
   const handleOnChange = (e) => {
     setInput(e.target.value);
   };
-  mensajes && mensajes.sort(function (a, b) {
-    if (a.createdAt > b.createdAt) {
-      return 1;
-    }
-    if (a.createdAt < b.createdAt) {
-      return -1;
-    }
-    // a must be equal to b
-    return 0;
-  });
+  mensajes &&
+    mensajes.sort(function (a, b) {
+      if (a.createdAt > b.createdAt) {
+        return 1;
+      }
+      if (a.createdAt < b.createdAt) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
 
-/*   let date = messages && messages[0].createdAt.split(".", 1).join("").split("T").pop().slice(0,2)
+  /*   let date = messages && messages[0].createdAt.split(".", 1).join("").split("T").pop().slice(0,2)
   console.log(date - 3) */
   return (
     <div className="chat">
@@ -138,18 +141,6 @@ if (minutos < 10){ minutos = '0' + minutos}
             </div>
           ))}
         </ScrollToBottom>
-        {/*         <ChatMessage
-          name={"HOST"}
-          message="This is a message"
-          timestamp={"8:26"}
-          isSender={true}
-        />
-        <ChatMessage
-          name={"GUEST"}
-          message="This is a message"
-          timestamp={"8:26"}
-          isSender={false}
-        /> */}
       </div>
       <div className="chat__footer">
         <IconButton>
@@ -170,51 +161,3 @@ if (minutos < 10){ minutos = '0' + minutos}
     </div>
   );
 }
-
-// import { Container } from "@mui/system";
-// import { useEffect, useState } from "react";
-// import io from "socket.io-client";
-// import styled from "styled-components";
-// import { Avatar } from "@mui/material";
-// import Sidebar from "./Sidebar/SideBar";
-// import getHostID from "../../../../api/utils/getHostID";
-// import { useAuth0 } from "@auth0/auth0-react";
-// import router from "../../../../api/src/routes/chat";
-
-// // const socket = io("http://localhost:3001");
-
-// export default function Chat(id, users) {
-//   const [user] = useAuth0;
-//   //const [guestID] = Chat donde user sea
-
-//   const hostID = getHostID(users, user);
-
-//   const enterChat = () => {
-//     // router.push(`/chat/${id}`)
-//   };
-//   return (
-//     <Container1 onClick={enterChat}>
-//       {/* {chat ? (
-//         <UserAvatar1 src={host?.imgURL} />
-//         ) : (
-//           <UserAvatar1>{guest[0]}</UserAvatar1>
-//         )
-//       }
-
-//       <p>{hostID}</p> */}
-//     </Container1>
-//   );
-// }
-
-// const Container1 = styled.div`
-//   display: flex;
-//   align-items: center;
-//   cursor: pointer;
-//   padding: 15px;
-//   word-break: break-word;
-// `;
-
-// const UserAvatar1 = styled(Avatar)`
-//   margin: 5px;
-//   margin-right: 15px;
-// `;
