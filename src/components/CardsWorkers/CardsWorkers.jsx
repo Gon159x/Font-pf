@@ -59,7 +59,7 @@ export default function CardsWorkers({
             </div>
           </div>
           <div className={s.location}>
-            <PinDropIcon fontSize="large" />
+            {/* <PinDropIcon fontSize="large" /> */}
           </div>
         </div>
       </div>

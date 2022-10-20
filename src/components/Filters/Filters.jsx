@@ -56,7 +56,7 @@ const Filters = ({callbk}) => {
 
   return (
     <div className={styles.fieldContainer}>
-      <div className={styles.textField}>
+      {/* <div className={styles.textField}>
         <TextField
           fullWidth
           variant="outlined"
@@ -70,7 +70,7 @@ const Filters = ({callbk}) => {
           <MenuItem value="maxRating">Mayor Rating</MenuItem>
           <MenuItem value="minRating">Menor Rating</MenuItem>
         </TextField>
-      </div>
+      </div> */}
       <div className={styles.textField}>
         <TextField
           fullWidth
