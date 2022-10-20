@@ -14,6 +14,7 @@ const ProtectedRoute = ({ children }) => {
   const [redirect, setRedirect] = React.useState(false);
 
    useEffect(() => {
+    //alguna condicion para no cambiar el userDetail
     if(isAuthenticated){
       dispatch(getUserId(user.sub))
       if(userDetail.message){
@@ -31,7 +32,7 @@ const ProtectedRoute = ({ children }) => {
 
       }
     }
-  },[userDetail,dispatch]) 
+  },[dispatch]) 
 
 
 
