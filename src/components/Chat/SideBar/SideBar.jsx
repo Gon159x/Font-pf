@@ -21,7 +21,7 @@ function Sidebar() {
 
   useEffect(() => {
     if (!isLoading && chats.length === 0) {
-      dispatch(getChats(chat));
+      dispatch(getChats(user.sub));
     }
   });
   const handleChange = (e) => {
@@ -29,7 +29,7 @@ function Sidebar() {
   };
   const handleSearch = (e) => {
     e.preventDefault();
-    dispatch(getChats(chat));
+    //dispatch(getChats(chat));
   };
 
   return (

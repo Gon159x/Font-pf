@@ -16,11 +16,11 @@ export default function SiderbarChat({
       <div className="sidebarChat">
         <Avatar
           sx={{ width: 50, height: 50 }}
-          src={host.ID === authid ? `${guest.img}` : `${host.img}`}
+          src={!host ? " loading" :host.ID === authid ? `${guest.img}` : `${host.img}`}
         />
         <div className="sidebarChat__info">
           <h2>
-            {host.ID === authid
+            {!host ? "loading" : host.ID === authid
               ? `${guest.name} ${guest.lastName}`
               : `${host.name} ${host.lastName}`}
           </h2>
