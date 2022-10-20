@@ -23,6 +23,7 @@ const WorkersMap = (props) => {
     return (
       <>
         {arr.map((worker) => (
+          worker.coordinates?
           <Marker
             key={worker.id}
             position={{
@@ -44,7 +45,7 @@ const WorkersMap = (props) => {
                 </div>
               </Popup>
             </Link>
-          </Marker>
+          </Marker> : <div></div>
         ))}
       </>
     );
