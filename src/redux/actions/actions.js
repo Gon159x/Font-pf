@@ -42,10 +42,10 @@ import {
 } from "./actions_vars";
 import { io } from "socket.io-client";
 
-//const URL = "http://localhost:3001/";
-const baseURL = "https://databasepf.herokuapp.com/"
+const URL = "*";
+//const URL = "https://databasepf.herokuapp.com/"
 
-//const baseURL = "http://localhost:3001/"; //Esto se cambia por localhost:3001 para usarlo local
+const baseURL = "*"; //Esto se cambia por localhost:3001 para usarlo local
 
 export function getWorkers(query, search) {
   return function (dispatch) {
@@ -71,7 +71,6 @@ export function agregarSocker(id) {
   return async function (dispatch) {
     const socket = await io(baseURL);
     await socket.emit("addUser", id);
-    console.log(socket)
     dispatch({ type: AGREGAR_SOCKET, payload: socket });
   };
 }
@@ -538,7 +537,6 @@ export function premiumPay(payload) {
 export function updateWorker(payload, payload2, payloadId) {
   return async function (dispatch) {
     payload.jobs = payload2;
-    console.log(payload)
     const worker = await axios.put(
       baseURL+"worker/" + payloadId,
       payload

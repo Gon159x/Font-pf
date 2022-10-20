@@ -10,8 +10,7 @@ import "./WorkerMap.css";
 const WorkersMap = (props) => {
   const [users, setUsers] = useState([]);
   const { user, isLoading } = useAuth0();
-  const baseURL = "https://databasepf.herokuapp.com/"
-  //const baseURL = "http://localhost:3001/"; 
+  const baseURL = "*"; 
   useEffect(() => {
     axios.get(baseURL+"users").then((res) => setUsers(res.data));
   }, []);

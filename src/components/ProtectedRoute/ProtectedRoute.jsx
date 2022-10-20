@@ -13,10 +13,8 @@ const ProtectedRoute = ({ children }) => {
   const dispatch = useDispatch();
   const [redirect, setRedirect] = React.useState(false);
 
-   useEffect(() => {
-    //alguna condicion para no cambiar el userDetail
+  /* useEffect(() => {
     if(isAuthenticated){
-      if (userDetail.onBoarded) return;
       dispatch(getUserId(user.sub))
       if(userDetail.message){
         dispatch(createUser({
@@ -33,40 +31,39 @@ const ProtectedRoute = ({ children }) => {
 
       }
     }
-  },[userDetail,dispatch]) 
+  },[userDetail, dispatch]) */
 
+  // userDetail.length !== 0 && console.log("userDetail", userDetail)
 
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(getUserId(user.sub));
 
-  // React.useEffect(() => {
-  //   console.log(userDetail);
-  //   if (isAuthenticated) {
-  //     dispatch(getUserId(user.sub));
-
-  //     if (alreadyOnboard) return;
-  //     if (userDetail.id) {
-  //       if (!userDetail.onBoarded) {
-  //         setRedirect(true);
-  //       } else {
-  //         setRedirect(false);
-  //       }
-  //     } else if (userDetail.message) {
-  //       dispatch(
-  //         createUser({
-  //           ID: user.sub,
-  //           email: user.email,
-  //           img: user.picture,
-  //         })
-  //       );
-  //       setRedirect(true);
-  //     }
-  //   }
-  // }, [
-  //   dispatch,
-  //   isAuthenticated,
-  //   userDetail.id,
-  //   userDetail.message,
-  //   userDetail.onBoarded,
-  // ]);
+      if (alreadyOnboard) return;
+      if (userDetail.id) {
+        if (!userDetail.onBoarded) {
+          setRedirect(true);
+        } else {
+          setRedirect(false);
+        }
+      } else if (userDetail.message) {
+        dispatch(
+          createUser({
+            ID: user.sub,
+            email: user.email,
+            img: user.picture,
+          })
+        );
+        setRedirect(true);
+      }
+    }
+  }, [
+    dispatch,
+    isAuthenticated,
+    userDetail.id,
+    userDetail.message,
+    userDetail.onBoarded,
+  ]);
 
   if (isAuthenticated && redirect) return <Navigate to="/onboarding" />;
 
