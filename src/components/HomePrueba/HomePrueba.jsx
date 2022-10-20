@@ -77,18 +77,17 @@ export default function HomePrueba() {
           <div className={s.workers}>
             {currentWorkers.length ? (
               currentWorkers.map((worker,index) => {
-                console.log(worker)
                 return (
                   <CardsWorkers
                     key={index}
                     id={worker.User.ID ? worker.User.ID:index}
-                    name={worker.User.name ? worker.User.name:"Invalido"}
-                    lastName={worker.User.lastName ?worker.User.lastName : "Invalido" }
-                    job={worker.Jobs[0].name ? worker.Jobs[0].name : "Invalido"}
-                    country={worker.User.Country ? worker.User.Country.name : "Invalido" }
-                    city={worker.User.city ? worker.User.city : "Invalido"}
+                    name={worker.User.name ? worker.User.name:"Nombre invalido"}
+                    lastName={worker.User.lastName ?worker.User.lastName : "Apellido invalido" }
+                    job={worker.Jobs[0].name ? worker.Jobs[0].name : "Trabajo invalido"}
+                    country={worker.User.Country ? worker.User.Country.name : "Nacionalidad invalida" }
+                    city={worker.User.city ? worker.User.city : "invalido"}
                     premium={worker.premium ? worker.premium :false}
-                    img={worker.User.img ? worker.User.img : "Invalido"}
+                    img={worker.User.img ? worker.User.img : "invalido"}
                   />
                 );
               })
